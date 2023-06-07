@@ -1,4 +1,7 @@
 from tkinter import *
+from tkinter import messagebox
+import sqlite3 as sq3 
+
 
 '''
 *********************************
@@ -13,16 +16,59 @@ from tkinter import *
 #   BBDD
 
 #       Conectar
+def conectar():
+    global con
+    global cur
+    con = sq3.connect('my-db.db')
+    cur = con.cursor()
+    messagebox.showinfo("STATUS","Conectado con exito")
 #       Listar
+'''----------------------------------------------------------------'''
 #       Salir
+def salir():
+    resp = messagebox.askquestion("Confirme","Esta seguro que desea salir?")
+    if resp == "yes":
+        con.close()
+        raiz.destroy()
 
 #   GRÁFICAS
 
 #   LIMPIAR
+def limpiar():
+    legajo.set("")
+    apellido.set("")  
+    nombre.set("")  
+    email.set("")  
+    calificacion.set("")  
+    escuela.set("Seleccione")  
+    localidad.set("")  
+    provincia.set("")  
+    legajo_input.config(state='normal')
 
 #   ACERCA DE
     #Licencia
+def mostrar_licencia():
+    msg = '''
+    Sistema CRUD en Python
+    Copyright (C) 2023 - xxxxx xxxx
+    Email: xxxx@xxx.xx\n=======================================
+    This program is free software: you can redistribute it 
+    and/or modify it under the terms of the GNU General Public 
+    License as published by the Free Software Foundation, 
+    either version 3 of the License, or (at your option) any 
+    later version.
+    This program is distributed in the hope that it will be 
+    useful, but WITHOUT ANY WARRANTY; without even the 
+    implied warranty of MERCHANTABILITY or FITNESS FOR A 
+    PARTICULAR PURPOSE.  See the GNU General Public License 
+    for more details.
+    You should have received a copy of the GNU General Public 
+    License along with this program.  
+    If not, see <https://www.gnu.org/licenses/>.'''
+    messagebox.showinfo("LICENCIA",msg)
     #Acerca de
+def mostrar_acercade():
+    messagebox.showinfo("Acerca de","Created by Monica Melgarejo for BIG DATA course \n June 2023")
 
 # *********** MENU CRUD (CREATE-READ-UPDATE-DELETE**************
 
@@ -58,11 +104,11 @@ raiz.config(menu=barramenu)
 bbddmenu = Menu(barramenu,tearoff=0) #objeto de clase barramenu
     #comandos SUB MENU BBDD
 #conect button
-bbddmenu.add_command(label="Conect BBDD")
+bbddmenu.add_command(label="Conect BBDD",command=conectar)
 #student list button
 bbddmenu.add_command(label="List of students")
 #exit button
-bbddmenu.add_command(label="Exit")
+bbddmenu.add_command(label="Exit",command=salir)
 
 
 ######SUB MENU Graficas######
@@ -76,16 +122,16 @@ statmenu.add_command(label="Score")
 ######SUB MENU Limpiar######
 clearmenu=Menu(barramenu,tearoff=0)
     #comandos SUB MENU Limpiar
-clearmenu.add_command(label="Clear fields")
+clearmenu.add_command(label="Clear fields",command=limpiar)
 
 ######SUB MENU Acerca de...######
 infomenu = Menu(barramenu,tearoff=0)
     #comandos SUB MENU Acerca de...
 #license
-infomenu.add_command(label="License")
+infomenu.add_command(label="License",command=mostrar_licencia)
 
 #about..
-infomenu.add_command(label="About...")
+infomenu.add_command(label="About...",command=mostrar_acercade)
 
 #cascades from principal menu
 barramenu.add_cascade(label="BBDD", menu=bbddmenu)
@@ -216,7 +262,7 @@ framecopy = Frame(raiz)
 framecopy.config(bg='black')
 framecopy.pack(fill='both')
 
-copylabel = Label(framecopy, text="(2023) por Lucas Taskar")
+copylabel = Label(framecopy, text="(2023) by Monica Melgarejo")
 copylabel.config(bg='black',fg='white')
 copylabel.grid(row=0, column=0, padx=10, pady=10)
 
